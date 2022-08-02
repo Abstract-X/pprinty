@@ -1,5 +1,6 @@
 from typing import Any
 from dataclasses import dataclass
+from pathlib import Path
 
 import pytest
 
@@ -650,7 +651,7 @@ PRINT_TO_FILE_TEST_DATA = (
 
 
 @pytest.mark.parametrize(*BEHAVIOR_TEST_DATA)
-def test_behavior(value: Any, indent: int, expected_result) -> None:
+def test_behavior(value: Any, indent: int, expected_result: str) -> None:
     stdout_context = StdoutContext()
 
     with stdout_context:
@@ -660,13 +661,13 @@ def test_behavior(value: Any, indent: int, expected_result) -> None:
 
 
 @pytest.mark.parametrize(*INDENT_LESS_THAN_ZERO_TEST_DATA)
-def test_indent_less_than_zero(indent) -> None:
+def test_indent_less_than_zero(indent: int) -> None:
     with pytest.raises(ValueError):
         pprint(indent=indent)
 
 
 @pytest.mark.parametrize(*PRINT_TO_FILE_TEST_DATA)
-def test_print_to_file(tmp_path, value: str, indent: int, expected_result: str) -> None:
+def test_print_to_file(tmp_path: Path, value: str, indent: int, expected_result: str) -> None:
     file = tmp_path / "file.txt"
 
     with file.open("w", encoding="UTF-8") as stream:
