@@ -33,8 +33,7 @@ def _get_string(
     value: Any,
     *,
     indent: int,
-    indent_level: int = 0,
-    add_indent: bool = True
+    indent_level: int = 0
 ) -> str:
     type_ = type(value)
 
@@ -46,9 +45,6 @@ def _get_string(
     else:
         string = repr(value)
 
-    if add_indent:
-        string = _get_indent(indent, indent_level) + string
-
     return string
 
 
@@ -59,7 +55,8 @@ def _get_list_string(object_: list, indent: int, indent_level: int) -> str:
 
         for i in object_:
             lines.append(
-                _get_string(i, indent=indent, indent_level=nested_indent_level)
+                _get_indent(indent, nested_indent_level)
+                + _get_string(i, indent=indent, indent_level=nested_indent_level)
             )
 
         return "[\n" + ",\n".join(lines) + "\n" + _get_indent(indent, indent_level) + "]"
@@ -74,12 +71,7 @@ def _get_dict_string(object_: dict, indent: int, indent_level: int) -> str:
 
         for key, value in object_.items():
             key_string = repr(key)
-            value_string = _get_string(
-                value,
-                indent=indent,
-                indent_level=nested_indent_level,
-                add_indent=False
-            )
+            value_string = _get_string(value, indent=indent, indent_level=nested_indent_level)
             lines.append(
                 _get_indent(indent, nested_indent_level) + f"{key_string}: {value_string}"
             )
@@ -96,7 +88,8 @@ def _get_tuple_string(object_: tuple, indent: int, indent_level: int) -> str:
 
         for i in object_:
             lines.append(
-                _get_string(i, indent=indent, indent_level=nested_indent_level)
+                _get_indent(indent, nested_indent_level)
+                + _get_string(i, indent=indent, indent_level=nested_indent_level)
             )
 
         if len(lines) == 1:
@@ -114,7 +107,8 @@ def _get_set_string(object_: set, indent: int, indent_level: int) -> str:
 
         for i in object_:
             lines.append(
-                _get_string(i, indent=indent, indent_level=nested_indent_level)
+                _get_indent(indent, nested_indent_level)
+                + _get_string(i, indent=indent, indent_level=nested_indent_level)
             )
 
         return "{\n" + ",\n".join(lines) + "\n" + _get_indent(indent, indent_level) + "}"
@@ -129,7 +123,8 @@ def _get_frozenset_string(object_: frozenset, indent: int, indent_level: int) ->
 
         for i in object_:
             lines.append(
-                _get_string(i, indent=indent, indent_level=nested_indent_level)
+                _get_indent(indent, nested_indent_level)
+                + _get_string(i, indent=indent, indent_level=nested_indent_level)
             )
 
         return (
@@ -153,12 +148,7 @@ def _get_dataclass_string(object_: object, indent: int, indent_level: int) -> st
         object_data = vars(object_)
 
     for name, value in object_data.items():
-        value_string = _get_string(
-            value,
-            indent=indent,
-            indent_level=nested_indent_level,
-            add_indent=False
-        )
+        value_string = _get_string(value, indent=indent, indent_level=nested_indent_level)
         lines.append(
             _get_indent(indent, nested_indent_level) + f"{name}={value_string}"
         )
