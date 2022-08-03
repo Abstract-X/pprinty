@@ -12,7 +12,7 @@ def get_long_description() -> str:
 
 setuptools.setup(
     name="pprinty",
-    version="1.0.0",
+    version="1.1.0",
     packages=setuptools.find_packages(exclude=("tests",)),
     url="https://github.com/Abstract-X/pprinty",
     license="MIT",
